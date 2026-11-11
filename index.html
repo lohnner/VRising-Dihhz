@@ -3,137 +3,196 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ranking DanoTotal</title>
+<title>Ranking V Rising</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --fundo: #0c0a0e;
-    --painel: #15121a;
-    --painel-2: #1b1721;
-    --linha: #2a2430;
-    --texto: #e9e3d8;
-    --apagado: #9a9088;
+    --fundo: #08060a;
+    --vidro: rgba(18, 13, 20, .78);
+    --vidro-2: rgba(30, 22, 32, .7);
+    --linha: rgba(216, 178, 106, .16);
+    --linha-forte: rgba(216, 178, 106, .45);
+    --texto: #efe8dc;
+    --apagado: #a59a90;
     --ouro: #d8b26a;
-    --ouro-forte: #ffd27a;
-    --sangue: #e0454d;
-    --sangue-escuro: #9e171c;
-    --online: #58d68d;
+    --ouro-forte: #ffd98a;
+    --prata: #d5dae0;
+    --bronze: #d2905c;
+    --sangue: #ff4d57;
+    --sangue-escuro: #8f1218;
+    --online: #5fe39a;
+    --arte: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1604030";
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
-    background:
-      radial-gradient(900px 500px at 50% -120px, rgba(158, 23, 28, .28), transparent 70%),
-      var(--fundo);
+    background: var(--fundo);
     color: var(--texto);
     font-family: Inter, system-ui, "Segoe UI", sans-serif;
     font-size: 16px;
     line-height: 1.45;
     min-height: 100vh;
   }
-  .pagina { max-width: 1040px; margin: 0 auto; padding: 40px 16px 56px; }
-
-  header { text-align: center; margin-bottom: 28px; }
-  .selo { color: var(--sangue); font-size: 12px; letter-spacing: .32em; text-transform: uppercase; font-weight: 600; }
-  h1 {
-    font-family: Cinzel, Georgia, serif; font-weight: 700; letter-spacing: .04em;
-    font-size: clamp(30px, 6vw, 46px); margin: 8px 0 6px; color: var(--ouro-forte);
-    text-wrap: balance;
+  /* arte do jogo ao fundo, escurecida */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -2;
+    background: url("https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1604030/page_bg_raw.jpg") center top / cover no-repeat;
+    opacity: .34; filter: saturate(.9);
   }
-  .sub { color: var(--apagado); margin: 0; }
-
-  .barra {
-    display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between;
-    background: var(--painel); border: 1px solid var(--linha); border-radius: 10px;
-    padding: 10px 14px; margin-bottom: 18px; font-size: 14px;
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(1100px 600px at 50% 0, rgba(143, 18, 24, .28), transparent 70%),
+      linear-gradient(180deg, rgba(8, 6, 10, .35) 0, rgba(8, 6, 10, .88) 55%, #08060a 100%);
   }
-  .estado { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--apagado); }
-  .estado b { color: var(--texto); font-weight: 600; font-variant-numeric: tabular-nums; }
-  .ponto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #5b5560; margin-right: 6px; vertical-align: 1px; }
-  .ponto.on { background: var(--online); box-shadow: 0 0 8px rgba(88, 214, 141, .7); }
-  label.filtro { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; color: var(--texto); }
-  label.filtro input { accent-color: var(--sangue); width: 16px; height: 16px; }
-
-  .aviso {
-    border: 1px solid #5a4520; background: #1d1710; color: #e8cf9a;
-    border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; font-size: 14px;
-  }
-  .aviso.erro { border-color: #6a2327; background: #1e1113; color: #f0a9ad; }
   [hidden] { display: none !important; }
+  .pagina { max-width: 1120px; margin: 0 auto; padding: 20px 16px 48px; }
 
+  /* ---------- topo com a arte do jogo ---------- */
+  .heroi {
+    position: relative; overflow: hidden; border-radius: 18px;
+    border: 1px solid var(--linha-forte);
+    min-height: clamp(230px, 34vw, 360px);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    padding: 24px 16px 26px; text-align: center;
+    background: #140a0d url("https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1604030/library_hero.jpg") center 22% / cover no-repeat;
+    box-shadow: 0 30px 80px -30px rgba(143, 18, 24, .7), 0 0 0 1px rgba(0, 0, 0, .6) inset;
+  }
+  .heroi::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(8, 6, 10, .05) 0, rgba(8, 6, 10, .35) 45%, rgba(8, 6, 10, .94) 100%);
+  }
+  .heroi > * { position: relative; }
+  .logo { width: min(210px, 42vw); height: auto; filter: drop-shadow(0 6px 22px rgba(0, 0, 0, .9)); }
+  .nome-jogo { font-family: Cinzel, Georgia, serif; font-weight: 900; font-size: 44px; letter-spacing: .08em; color: var(--texto); }
+  h1 {
+    font-family: Cinzel, Georgia, serif; font-weight: 900; letter-spacing: .22em; text-transform: uppercase;
+    font-size: clamp(20px, 3.6vw, 30px); margin: 14px 0 4px; text-wrap: balance;
+    background: linear-gradient(180deg, #fff1c9, var(--ouro) 60%, #a77d3a);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 2px 30px rgba(216, 178, 106, .25);
+  }
+  .sub { color: #d8cfc3; margin: 0; font-size: 15px; text-shadow: 0 1px 8px #000; }
+
+  /* ---------- resumo ---------- */
+  .resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  @media (max-width: 760px) { .resumo { grid-template-columns: repeat(2, 1fr); } }
+  .cartao {
+    background: var(--vidro); border: 1px solid var(--linha); border-radius: 14px;
+    padding: 12px 14px; backdrop-filter: blur(8px); min-width: 0;
+  }
+  .cartao .rotulo { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--apagado); }
+  .cartao .num { font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: clamp(19px, 2.6vw, 26px); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cartao.on .num { color: var(--online); }
+  .cartao.d .num { color: var(--ouro-forte); }
+  .cartao.e .num { color: var(--sangue); }
+
+  .barra { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 0 2px 16px; font-size: 14px; color: var(--apagado); }
+  .chave { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; color: var(--texto); }
+  .chave input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .chave .trilho { width: 40px; height: 22px; border-radius: 999px; background: #2b232e; border: 1px solid var(--linha-forte); position: relative; transition: background .2s; flex: none; }
+  .chave .trilho::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--apagado); transition: transform .2s, background .2s; }
+  .chave input:checked + .trilho { background: var(--sangue-escuro); }
+  .chave input:checked + .trilho::after { transform: translateX(18px); background: #fff; }
+  .chave input:focus-visible + .trilho { outline: 2px solid var(--ouro-forte); outline-offset: 2px; }
+
+  .aviso { border: 1px solid #5a4520; background: rgba(29, 23, 16, .9); color: #e8cf9a; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 14px; }
+  .aviso.erro { border-color: #6a2327; background: rgba(30, 17, 19, .92); color: #f0a9ad; }
+
+  /* ---------- rankings ---------- */
   .colunas { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  @media (max-width: 760px) { .colunas { grid-template-columns: 1fr; } }
-
-  .quadro { background: var(--painel); border: 1px solid var(--linha); border-radius: 12px; overflow: hidden; }
+  @media (max-width: 860px) { .colunas { grid-template-columns: 1fr; } }
+  .quadro { background: var(--vidro); border: 1px solid var(--linha); border-radius: 18px; overflow: hidden; backdrop-filter: blur(10px); --cor: var(--ouro-forte); --brilho: rgba(216, 178, 106, .22); }
+  .quadro.essencia { --cor: var(--sangue); --brilho: rgba(255, 77, 87, .2); }
   .quadro h2 {
-    font-family: Cinzel, Georgia, serif; font-size: 17px; letter-spacing: .12em; text-transform: uppercase;
-    margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--linha); border-top: 3px solid var(--ouro);
-    background: var(--painel-2); color: var(--ouro-forte);
+    font-family: Cinzel, Georgia, serif; font-size: 18px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    margin: 0; padding: 16px 18px 14px; text-align: center; color: var(--cor);
+    background: linear-gradient(180deg, var(--brilho), transparent);
+    border-bottom: 1px solid var(--linha);
   }
-  .quadro.essencia h2 { border-top-color: var(--sangue-escuro); color: #f08a8f; }
+  .quadro h2 small { display: block; font-family: Inter, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .12em; color: var(--apagado); margin-top: 3px; }
 
-  ol { list-style: none; margin: 0; padding: 0; }
-  li {
-    display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 10px;
-    padding: 10px 16px; border-bottom: 1px solid var(--linha);
+  .podio { display: grid; grid-template-columns: 1fr 1.12fr 1fr; gap: 10px; align-items: end; padding: 18px 14px 6px; }
+  .degrau {
+    min-width: 0; text-align: center; border-radius: 14px; padding: 12px 8px 12px;
+    background: linear-gradient(180deg, var(--vidro-2), rgba(12, 9, 14, .6));
+    border: 1px solid var(--linha); --medalha: var(--prata);
   }
-  li:last-child { border-bottom: 0; }
+  .degrau.p1 { --medalha: var(--ouro-forte); padding-top: 18px; padding-bottom: 20px; border-color: var(--linha-forte); box-shadow: 0 0 34px -8px var(--brilho); }
+  .degrau.p3 { --medalha: var(--bronze); }
+  .degrau.off { opacity: .6; }
+  .medalha {
+    width: 38px; height: 38px; margin: 0 auto 8px; border-radius: 50%; display: grid; place-items: center;
+    font-family: Cinzel, Georgia, serif; font-weight: 900; font-size: 17px; color: #140e08;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--medalha) 55%); box-shadow: 0 0 0 3px rgba(0, 0, 0, .45), 0 0 16px -2px var(--medalha);
+  }
+  .degrau.p1 .medalha { width: 48px; height: 48px; font-size: 21px; }
+  .degrau .nick { font-weight: 700; font-size: 15px; }
+  .degrau .valor { font-family: Cinzel, Georgia, serif; font-weight: 700; color: var(--cor); font-size: clamp(14px, 1.7vw, 18px); font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .degrau.p1 .valor { font-size: clamp(16px, 2vw, 21px); }
+
+  .nick { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .visto { font-size: 12px; color: var(--apagado); }
+  .ponto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #5b5560; margin-right: 6px; vertical-align: 1px; }
+  .ponto.on { background: var(--online); box-shadow: 0 0 8px rgba(95, 227, 154, .8); }
+
+  ol { list-style: none; margin: 0; padding: 8px 10px 12px; }
+  li { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; }
+  li:nth-child(odd) { background: rgba(255, 255, 255, .025); }
   li.off { opacity: .55; }
   .pos { font-family: Cinzel, Georgia, serif; font-weight: 700; color: var(--apagado); text-align: center; font-variant-numeric: tabular-nums; }
-  li.top1 .pos { color: var(--ouro-forte); font-size: 20px; }
-  li.top2 .pos { color: #cfd3d8; font-size: 18px; }
-  li.top3 .pos { color: #c98a5a; font-size: 18px; }
-  li.top1 { background: linear-gradient(90deg, rgba(216, 178, 106, .10), transparent 70%); }
-  .quem { min-width: 0; }
-  .nick { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .visto { font-size: 12px; color: var(--apagado); }
-  .valor { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ouro-forte); font-size: 17px; }
-  .essencia .valor { color: var(--sangue); }
-  .vazio { padding: 28px 16px; text-align: center; color: var(--apagado); }
+  li .nick { font-weight: 600; }
+  li .valor { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--cor); }
+  .vazio { padding: 34px 16px; text-align: center; color: var(--apagado); }
 
-  footer { margin-top: 26px; text-align: center; color: var(--apagado); font-size: 13px; }
+  footer { margin-top: 26px; text-align: center; color: #7d736b; font-size: 12px; }
 </style>
 </head>
 <body>
 <div class="pagina">
-  <header>
-    <div class="selo">V Rising</div>
-    <h1>Ranking DanoTotal</h1>
-    <p class="sub">Dano causado e essência de sangue de quem joga com o mod</p>
+  <header class="heroi">
+    <img class="logo" id="logo" alt="V Rising" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1604030/logo.png">
+    <div class="nome-jogo" id="nomeJogo" hidden>V Rising</div>
+    <h1>Ranking dos Vampiros</h1>
+    <p class="sub">Quem mais causou dano e quem mais colheu essência de sangue</p>
   </header>
 
-  <div class="aviso" id="demo" hidden>Modo demonstração: os jogadores abaixo são de exemplo. Preencha <code>URL_DO_BANCO</code> no começo do script desta página para ligar no ranking de verdade.</div>
+  <section class="resumo">
+    <div class="cartao on"><div class="rotulo">Online agora</div><div class="num" id="qtdOnline">0</div></div>
+    <div class="cartao"><div class="rotulo">Vampiros</div><div class="num" id="qtdTotal">0</div></div>
+    <div class="cartao d"><div class="rotulo">Dano de todos</div><div class="num" id="somaDano">0</div></div>
+    <div class="cartao e"><div class="rotulo">Essência de todos</div><div class="num" id="somaEssencia">0</div></div>
+  </section>
+
+  <div class="aviso" id="demo" hidden>Modo demonstração: os jogadores abaixo são de exemplo.</div>
   <div class="aviso erro" id="erro" hidden></div>
 
   <div class="barra">
-    <div class="estado">
-      <span><span class="ponto on"></span><b id="qtdOnline">0</b> online</span>
-      <span><b id="qtdTotal">0</b> jogadores</span>
-      <span id="quando">Carregando…</span>
-    </div>
-    <label class="filtro"><input type="checkbox" id="soOnline"> Mostrar só quem está online</label>
+    <span id="quando">Carregando…</span>
+    <label class="chave"><input type="checkbox" id="soOnline"><span class="trilho"></span>Só quem está online</label>
   </div>
 
   <div class="colunas">
     <section class="quadro dano">
-      <h2>Dano total</h2>
+      <h2>Dano total<small>todo o dano causado</small></h2>
+      <div class="podio" id="podioDano"></div>
       <ol id="listaDano"></ol>
     </section>
     <section class="quadro essencia">
-      <h2>Essência de sangue</h2>
+      <h2>Essência de sangue<small>toda a essência colhida</small></h2>
+      <div class="podio" id="podioEssencia"></div>
       <ol id="listaEssencia"></ol>
     </section>
   </div>
 
-  <footer>Atualiza sozinho a cada 15 segundos · online = jogou nos últimos 3 minutos</footer>
+  <footer>Página de fãs, sem vínculo oficial. V Rising e suas imagens pertencem à Stunlock Studios.</footer>
 </div>
 
 <script>
 // ===================== CONFIGURAÇÃO =====================
-// Endereço do seu Firebase Realtime Database, sem barra no final.
-// Exemplo: "https://meu-ranking-default-rtdb.firebaseio.com"
+// Endereço do Firebase Realtime Database, sem barra no final.
 const URL_DO_BANCO = "https://vrising-dihhz-default-rtdb.firebaseio.com";
 // ========================================================
 
@@ -142,6 +201,15 @@ const ONLINE_MS = 3 * 60 * 1000; // o mod envia a cada 1 minuto; 3 minutos sem e
 
 const $ = id => document.getElementById(id);
 const numero = v => Math.round(Number(v) || 0).toLocaleString("pt-BR");
+const curto = v => {
+  v = Number(v) || 0;
+  if (v >= 1e9) return (v / 1e9).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " bi";
+  if (v >= 1e6) return (v / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " mi";
+  return numero(v);
+};
+
+// se o logo do jogo não carregar, mostra o nome em texto
+$("logo").addEventListener("error", () => { $("logo").hidden = true; $("nomeJogo").hidden = false; });
 
 let jogadores = [];
 let ultimaBusca = 0;
@@ -161,7 +229,8 @@ function exemplo() {
 async function buscar() {
   try {
     let dados;
-    if (!URL_DO_BANCO) {
+    const demo = !URL_DO_BANCO || new URLSearchParams(location.search).has("demo");
+    if (demo) {
       $("demo").hidden = false;
       dados = exemplo();
     } else {
@@ -203,55 +272,65 @@ function haQuanto(ms) {
   return "há " + Math.floor(h / 24) + " dias";
 }
 
-function lista(el, campo) {
+function el(tag, classe, texto) {
+  const e = document.createElement(tag);
+  if (classe) e.className = classe;
+  if (texto !== undefined) e.textContent = texto; // sempre texto puro: o nick nunca vira HTML
+  return e;
+}
+
+function linhaNick(j, on) {
+  const nick = el("div", "nick");
+  nick.append(el("span", "ponto" + (on ? " on" : "")), j.nick);
+  nick.title = j.nick;
+  return nick;
+}
+
+const textoVisto = (j, on) => on ? "online agora" : (j.atualizado ? "visto " + haQuanto(agoraServidor() - j.atualizado) : "offline");
+
+function ranking(podio, lista, campo) {
   const soOnline = $("soOnline").checked;
   const ordenados = jogadores
     .filter(j => !soOnline || estaOnline(j))
     .sort((a, b) => b[campo] - a[campo] || a.nick.localeCompare(b.nick));
 
-  el.replaceChildren();
+  podio.replaceChildren();
+  lista.replaceChildren();
+  podio.hidden = !ordenados.length;
+
   if (!ordenados.length) {
-    const vazio = document.createElement("div");
-    vazio.className = "vazio";
-    vazio.textContent = soOnline ? "Ninguém online agora." : "Nenhum jogador ainda. Seja o primeiro!";
-    el.append(vazio);
+    lista.append(el("div", "vazio", soOnline ? "Ninguém online agora." : "Nenhum vampiro ainda. Seja o primeiro!"));
     return;
   }
-  ordenados.forEach((j, i) => {
+
+  // pódio: 2º à esquerda, 1º no meio, 3º à direita
+  [1, 0, 2].forEach(i => {
+    const j = ordenados[i];
+    if (!j) { podio.append(el("div")); return; }
     const on = estaOnline(j);
-    const li = document.createElement("li");
-    li.className = (i < 3 ? "top" + (i + 1) : "") + (on ? "" : " off");
+    const d = el("div", "degrau p" + (i + 1) + (on ? "" : " off"));
+    d.append(el("div", "medalha", i + 1), linhaNick(j, on), el("div", "valor", numero(j[campo])), el("div", "visto", textoVisto(j, on)));
+    podio.append(d);
+  });
 
-    const pos = document.createElement("div");
-    pos.className = "pos";
-    pos.textContent = i + 1;
-
-    const quem = document.createElement("div");
-    quem.className = "quem";
-    const nick = document.createElement("div");
-    nick.className = "nick";
-    const ponto = document.createElement("span");
-    ponto.className = "ponto" + (on ? " on" : "");
-    nick.append(ponto, j.nick); // texto puro: o nick nunca é interpretado como HTML
-    const visto = document.createElement("div");
-    visto.className = "visto";
-    visto.textContent = on ? "online agora" : (j.atualizado ? "visto " + haQuanto(agoraServidor() - j.atualizado) : "offline");
-    quem.append(nick, visto);
-
-    const valor = document.createElement("div");
-    valor.className = "valor";
-    valor.textContent = numero(j[campo]);
-
-    li.append(pos, quem, valor);
-    el.append(li);
+  ordenados.slice(3).forEach((j, i) => {
+    const on = estaOnline(j);
+    const li = el("li", on ? "" : "off");
+    const quem = el("div");
+    quem.style.minWidth = "0";
+    quem.append(linhaNick(j, on), el("div", "visto", textoVisto(j, on)));
+    li.append(el("div", "pos", i + 4), quem, el("div", "valor", numero(j[campo])));
+    lista.append(li);
   });
 }
 
 function desenhar() {
   $("qtdOnline").textContent = jogadores.filter(estaOnline).length;
   $("qtdTotal").textContent = jogadores.length;
-  lista($("listaDano"), "dano");
-  lista($("listaEssencia"), "essencia");
+  $("somaDano").textContent = curto(jogadores.reduce((s, j) => s + j.dano, 0));
+  $("somaEssencia").textContent = curto(jogadores.reduce((s, j) => s + j.essencia, 0));
+  ranking($("podioDano"), $("listaDano"), "dano");
+  ranking($("podioEssencia"), $("listaEssencia"), "essencia");
   relogio();
 }
 
