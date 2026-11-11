@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking DanoTotal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fundo: #0c0a0e;
+    --painel: #15121a;
+    --painel-2: #1b1721;
+    --linha: #2a2430;
+    --texto: #e9e3d8;
+    --apagado: #9a9088;
+    --ouro: #d8b26a;
+    --ouro-forte: #ffd27a;
+    --sangue: #e0454d;
+    --sangue-escuro: #9e171c;
+    --online: #58d68d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(900px 500px at 50% -120px, rgba(158, 23, 28, .28), transparent 70%),
+      var(--fundo);
+    color: var(--texto);
+    font-family: Inter, system-ui, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .pagina { max-width: 1040px; margin: 0 auto; padding: 40px 16px 56px; }
+
+  header { text-align: center; margin-bottom: 28px; }
+  .selo { color: var(--sangue); font-size: 12px; letter-spacing: .32em; text-transform: uppercase; font-weight: 600; }
+  h1 {
+    font-family: Cinzel, Georgia, serif; font-weight: 700; letter-spacing: .04em;
+    font-size: clamp(30px, 6vw, 46px); margin: 8px 0 6px; color: var(--ouro-forte);
+    text-wrap: balance;
+  }
+  .sub { color: var(--apagado); margin: 0; }
+
+  .barra {
+    display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between;
+    background: var(--painel); border: 1px solid var(--linha); border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 18px; font-size: 14px;
+  }
+  .estado { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--apagado); }
+  .estado b { color: var(--texto); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ponto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #5b5560; margin-right: 6px; vertical-align: 1px; }
+  .ponto.on { background: var(--online); box-shadow: 0 0 8px rgba(88, 214, 141, .7); }
+  label.filtro { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; color: var(--texto); }
+  label.filtro input { accent-color: var(--sangue); width: 16px; height: 16px; }
+
+  .aviso {
+    border: 1px solid #5a4520; background: #1d1710; color: #e8cf9a;
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; font-size: 14px;
+  }
+  .aviso.erro { border-color: #6a2327; background: #1e1113; color: #f0a9ad; }
+  [hidden] { display: none !important; }
+
+  .colunas { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 760px) { .colunas { grid-template-columns: 1fr; } }
+
+  .quadro { background: var(--painel); border: 1px solid var(--linha); border-radius: 12px; overflow: hidden; }
+  .quadro h2 {
+    font-family: Cinzel, Georgia, serif; font-size: 17px; letter-spacing: .12em; text-transform: uppercase;
+    margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--linha); border-top: 3px solid var(--ouro);
+    background: var(--painel-2); color: var(--ouro-forte);
+  }
+  .quadro.essencia h2 { border-top-color: var(--sangue-escuro); color: #f08a8f; }
+
+  ol { list-style: none; margin: 0; padding: 0; }
+  li {
+    display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+    padding: 10px 16px; border-bottom: 1px solid var(--linha);
+  }
+  li:last-child { border-bottom: 0; }
+  li.off { opacity: .55; }
+  .pos { font-family: Cinzel, Georgia, serif; font-weight: 700; color: var(--apagado); text-align: center; font-variant-numeric: tabular-nums; }
+  li.top1 .pos { color: var(--ouro-forte); font-size: 20px; }
+  li.top2 .pos { color: #cfd3d8; font-size: 18px; }
+  li.top3 .pos { color: #c98a5a; font-size: 18px; }
+  li.top1 { background: linear-gradient(90deg, rgba(216, 178, 106, .10), transparent 70%); }
+  .quem { min-width: 0; }
+  .nick { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .visto { font-size: 12px; color: var(--apagado); }
+  .valor { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ouro-forte); font-size: 17px; }
+  .essencia .valor { color: var(--sangue); }
+  .vazio { padding: 28px 16px; text-align: center; color: var(--apagado); }
+
+  footer { margin-top: 26px; text-align: center; color: var(--apagado); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <header>
+    <div class="selo">V Rising</div>
+    <h1>Ranking DanoTotal</h1>
+    <p class="sub">Dano causado e essência de sangue de quem joga com o mod</p>
+  </header>
+
+  <div class="aviso" id="demo" hidden>Modo demonstração: os jogadores abaixo são de exemplo. Preencha <code>URL_DO_BANCO</code> no começo do script desta página para ligar no ranking de verdade.</div>
+  <div class="aviso erro" id="erro" hidden></div>
+
+  <div class="barra">
+    <div class="estado">
+      <span><span class="ponto on"></span><b id="qtdOnline">0</b> online</span>
+      <span><b id="qtdTotal">0</b> jogadores</span>
+      <span id="quando">Carregando…</span>
+    </div>
+    <label class="filtro"><input type="checkbox" id="soOnline"> Mostrar só quem está online</label>
+  </div>
+
+  <div class="colunas">
+    <section class="quadro dano">
+      <h2>Dano total</h2>
+      <ol id="listaDano"></ol>
+    </section>
+    <section class="quadro essencia">
+      <h2>Essência de sangue</h2>
+      <ol id="listaEssencia"></ol>
+    </section>
+  </div>
+
+  <footer>Atualiza sozinho a cada 15 segundos · online = jogou nos últimos 3 minutos</footer>
+</div>
+
+<script>
+// ===================== CONFIGURAÇÃO =====================
+// Endereço do seu Firebase Realtime Database, sem barra no final.
+// Exemplo: "https://meu-ranking-default-rtdb.firebaseio.com"
+const URL_DO_BANCO = "https://vrising-dihhz-default-rtdb.firebaseio.com";
+// ========================================================
+
+const INTERVALO_MS = 15000;      // de quanto em quanto tempo a página busca os dados
+const ONLINE_MS = 3 * 60 * 1000; // o mod envia a cada 1 minuto; 3 minutos sem envio = offline
+
+const $ = id => document.getElementById(id);
+const numero = v => Math.round(Number(v) || 0).toLocaleString("pt-BR");
+
+let jogadores = [];
+let ultimaBusca = 0;
+let diferencaRelogio = 0; // relógio do servidor - relógio deste computador
+
+function exemplo() {
+  const agora = Date.now();
+  return {
+    a1: { nick: "Dihhz", dano: 1284530, essencia: 48210, atualizado: agora - 20000 },
+    a2: { nick: "Morgana", dano: 2107745, essencia: 39120, atualizado: agora - 45000 },
+    a3: { nick: "Lorde Vex", dano: 903112, essencia: 61300, atualizado: agora - 9 * 60000 },
+    a4: { nick: "Nyx", dano: 455870, essencia: 12480, atualizado: agora - 70000 },
+    a5: { nick: "Sangris", dano: 120344, essencia: 5310, atualizado: agora - 26 * 3600000 },
+  };
+}
+
+async function buscar() {
+  try {
+    let dados;
+    if (!URL_DO_BANCO) {
+      $("demo").hidden = false;
+      dados = exemplo();
+    } else {
+      const base = URL_DO_BANCO.replace(/\/+$/, "");
+      const resp = await fetch(base + "/jogadores.json", { cache: "no-store" });
+      if (!resp.ok) throw new Error("o banco respondeu " + resp.status);
+      dados = (await resp.json()) || {};
+      const dataServidor = Date.parse(resp.headers.get("date") || "");
+      if (!isNaN(dataServidor)) diferencaRelogio = dataServidor - Date.now();
+    }
+    jogadores = Object.entries(dados)
+      .filter(([, j]) => j && typeof j === "object")
+      .map(([id, j]) => ({
+        id,
+        nick: String(j.nick || "Sem nome").slice(0, 32),
+        dano: Number(j.dano) || 0,
+        essencia: Number(j.essencia) || 0,
+        atualizado: Number(j.atualizado) || 0,
+      }));
+    ultimaBusca = Date.now();
+    $("erro").hidden = true;
+  } catch (e) {
+    $("erro").textContent = "Não consegui carregar o ranking (" + e.message + "). Tentando de novo em instantes.";
+    $("erro").hidden = false;
+  }
+  desenhar();
+}
+
+const agoraServidor = () => Date.now() + diferencaRelogio;
+const estaOnline = j => agoraServidor() - j.atualizado < ONLINE_MS;
+
+function haQuanto(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  if (s < 60) return "há " + s + " s";
+  const m = Math.floor(s / 60);
+  if (m < 60) return "há " + m + " min";
+  const h = Math.floor(m / 60);
+  if (h < 48) return "há " + h + " h";
+  return "há " + Math.floor(h / 24) + " dias";
+}
+
+function lista(el, campo) {
+  const soOnline = $("soOnline").checked;
+  const ordenados = jogadores
+    .filter(j => !soOnline || estaOnline(j))
+    .sort((a, b) => b[campo] - a[campo] || a.nick.localeCompare(b.nick));
+
+  el.replaceChildren();
+  if (!ordenados.length) {
+    const vazio = document.createElement("div");
+    vazio.className = "vazio";
+    vazio.textContent = soOnline ? "Ninguém online agora." : "Nenhum jogador ainda. Seja o primeiro!";
+    el.append(vazio);
+    return;
+  }
+  ordenados.forEach((j, i) => {
+    const on = estaOnline(j);
+    const li = document.createElement("li");
+    li.className = (i < 3 ? "top" + (i + 1) : "") + (on ? "" : " off");
+
+    const pos = document.createElement("div");
+    pos.className = "pos";
+    pos.textContent = i + 1;
+
+    const quem = document.createElement("div");
+    quem.className = "quem";
+    const nick = document.createElement("div");
+    nick.className = "nick";
+    const ponto = document.createElement("span");
+    ponto.className = "ponto" + (on ? " on" : "");
+    nick.append(ponto, j.nick); // texto puro: o nick nunca é interpretado como HTML
+    const visto = document.createElement("div");
+    visto.className = "visto";
+    visto.textContent = on ? "online agora" : (j.atualizado ? "visto " + haQuanto(agoraServidor() - j.atualizado) : "offline");
+    quem.append(nick, visto);
+
+    const valor = document.createElement("div");
+    valor.className = "valor";
+    valor.textContent = numero(j[campo]);
+
+    li.append(pos, quem, valor);
+    el.append(li);
+  });
+}
+
+function desenhar() {
+  $("qtdOnline").textContent = jogadores.filter(estaOnline).length;
+  $("qtdTotal").textContent = jogadores.length;
+  lista($("listaDano"), "dano");
+  lista($("listaEssencia"), "essencia");
+  relogio();
+}
+
+function relogio() {
+  if (ultimaBusca) $("quando").textContent = "Atualizado " + haQuanto(Date.now() - ultimaBusca);
+}
+
+try { $("soOnline").checked = localStorage.getItem("soOnline") === "1"; } catch (e) {}
+$("soOnline").addEventListener("change", () => {
+  try { localStorage.setItem("soOnline", $("soOnline").checked ? "1" : "0"); } catch (e) {}
+  desenhar();
+});
+
+buscar();
+setInterval(buscar, INTERVALO_MS);
+setInterval(relogio, 1000);
+</script>
+</body>
+</html>
